@@ -187,10 +187,10 @@ public class NewScheduleDialog extends PromptDialogBox {
 
   protected void onOk() {
     String name = scheduleNameTextBox.getText();
-    if ( !NameUtils.isRepositoryObjectNameValid( name ) ) {
+    if ( !NameUtils.isValidFileName( name ) ) {
       MessageDialogBox errorDialog =
-          new MessageDialogBox(
-              Messages.getString( "error" ), Messages.getString( "prohibitedNameSymbols", name ), false, false, true ); //$NON-NLS-1$ //$NON-NLS-2$
+          new MessageDialogBox( Messages.getString( "error" ), Messages.getString( "prohibitedNameSymbols", name,
+              NameUtils.ReservedCharListForDisplay( " " ) ), false, false, true ); //$NON-NLS-1$ //$NON-NLS-2$
       errorDialog.center();
       return;
     }

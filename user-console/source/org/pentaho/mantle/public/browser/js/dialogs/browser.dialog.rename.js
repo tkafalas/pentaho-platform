@@ -360,9 +360,11 @@ define([
           });
 
       var name = path.split("/")[path.split("/").length - 1];
-      var dotIndex = name.search("\\.");
-      if (dotIndex > -1) {
-        name = name.substr(0, dotIndex);
+      if ( overrideType !== "folder") {
+    	  var dotIndex = name.lastIndexOf("\\.");
+	      if (dotIndex > -1) {
+	        name = name.substr(0, dotIndex);
+	      }
       }
 
       this.model.set("path", repoPath);
