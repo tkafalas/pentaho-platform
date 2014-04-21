@@ -361,13 +361,13 @@ public class SolutionBrowserPanel extends HorizontalPanel {
   @SuppressWarnings( "nls" )
   public static String pathToId( String path ) {
     String id = path.replace( "/", ":" );
-    id = id.replace( "%", "%25" );
-    id = id.replace( "#", "%23" );
-    id = id.replace( "{", "%7B" );
-    id = id.replace( "}", "%7D" );
-    id = id.replace( "<", "%3C" );
-    id = id.replace( ">", "%3E" );
-    id = id.replace( "+", "%2B" );
+//    id = id.replace( "%", "%25" );
+//    id = id.replace( "#", "%23" );
+//    id = id.replace( "{", "%7B" );
+//    id = id.replace( "}", "%7D" );
+//    id = id.replace( "<", "%3C" );
+//    id = id.replace( ">", "%3E" );
+//    id = id.replace( "+", "%2B" );
 
     if ( !id.startsWith( ":" ) ) {
       id = ":" + id;
@@ -375,6 +375,7 @@ public class SolutionBrowserPanel extends HorizontalPanel {
     if ( id.endsWith( ":" ) ) {
       id = id.substring( 0, id.length() - 2 );
     }
+    id = encodeUri(id);
     return id;
   }
 
@@ -397,7 +398,7 @@ public class SolutionBrowserPanel extends HorizontalPanel {
     final String moduleName = GWT.getModuleName();
     final String contextURL = moduleBaseURL.substring( 0, moduleBaseURL.lastIndexOf( moduleName ) );
     final String path = solutionPath; // Expecting some encoding here
-    final String url = contextURL + "api/repo/files/" + URL.encodePathSegment( pathToId( path ) ) + "/properties"; //$NON-NLS-1$
+    final String url = contextURL + "api/repo/files/" + pathToId( path ) + "/properties"; //$NON-NLS-1$
 
     RequestBuilder executableTypesRequestBuilder = new RequestBuilder( RequestBuilder.GET, url );
     executableTypesRequestBuilder.setHeader( "accept", "application/json" );
@@ -787,5 +788,10 @@ public class SolutionBrowserPanel extends HorizontalPanel {
     }
     return mypath;
   }
+  
+  private static final native String encodeUri( String URI )
+  /*-{
+    return encodeURIComponent(URI);
+  }-*/;
 
 }

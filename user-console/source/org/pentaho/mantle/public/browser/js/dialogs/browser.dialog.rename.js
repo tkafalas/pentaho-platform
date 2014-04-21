@@ -82,19 +82,12 @@ define([
         this.set("name", prevName);
         this.set("path", prevPath);
       };
-
-      if(!illegalCharacters){
-        BrowserUtils._makeAjaxCall("GET", "text", BrowserUtils.getUrlBase() + "api/repo/files/reservedCharacters", false, function (result) {
-          illegalCharacters = result;
-        });
-      }
-
-      if (!isValidName(name, illegalCharacters)) {
-        var i18n = me.view.options.i18n;
-        var body = i18n.prop("invalidCharactersDialogDescription", name, illegalCharacters.split(',').join(' '));
-        me.view.createCannotRenameDialog(body, me.view).show(me.view);
-        setPrevVals.apply(me);
-        return;
+      
+      var m = invalidCharactersRegExp.exec(name);
+      if (m != null) {
+	      var i18n = me.view.options.i18n;
+	      var body = i18n.prop("invalidCharactersDialogDescription", name, invalidCharacters);
+	      me.view.createCannotRenameDialog(body, me.view).show(me.view);
       }else{
         // api/repo/files/:home:joe:test.xaction/rename?newName=newFileOrFolderName
         BrowserUtils._makeAjaxCall("PUT", "text", BrowserUtils.getUrlBase() + "api/repo/files/" + FileBrowser.encodePathComponents(prevPath) + "/rename?newName=" + FileBrowser.encodePathComponents(name), true,
@@ -373,9 +366,11 @@ define([
           });
 
       var name = path.split("/")[path.split("/").length - 1];
-      var dotIndex = name.search("\\.");
-      if (dotIndex > -1) {
-        name = name.substr(0, dotIndex);
+      if ( overrideType !== "folder") {
+    	  var dotIndex = name.lastIndexOf("\.");
+	      if (dotIndex > -1) {
+	        name = name.substr(0, dotIndex);
+	      }
       }
 
       this.model.set("path", repoPath);

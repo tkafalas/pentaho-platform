@@ -1493,9 +1493,11 @@ public class FileResource extends AbstractJaxRSResource {
       buf.append( getParentPath( fileToBeRenamed.getPath() ) );
       buf.append( RepositoryFile.SEPARATOR );
       buf.append( newName );
-      String extension = getExtension( fileToBeRenamed.getName() );
-      if ( extension != null ) {
-        buf.append( extension );
+      if ( !fileToBeRenamed.isFolder() ) {
+        String extension = getExtension( fileToBeRenamed.getName() );
+        if ( extension != null ) {
+          buf.append( extension );
+        }
       }
       repository.moveFile( fileToBeRenamed.getId(), buf.toString(), "Renaming the file" );
       RepositoryFile movedFile = repository.getFileById( fileToBeRenamed.getId() );
