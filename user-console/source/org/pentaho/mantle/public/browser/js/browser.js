@@ -24,11 +24,12 @@ define([
   "common-ui/util/spin.min",
   "common-ui/util/PentahoSpinner",
   "js/browser.templates",
+  "common-ui/util/URLEncoder",
   "common-ui/bootstrap",
   "common-ui/handlebars",
   "common-ui/jquery-i18n",
   "common-ui/jquery",
-], function (FileButtons, FolderButtons, TrashButtons, TrashItemButtons, RenameDialog, Spinner, spin, templates) {
+], function (FileButtons, FolderButtons, TrashButtons, TrashItemButtons, RenameDialog, Spinner, spin, templates, Encoder) {
 
 
   if(window.top.mantle_isBrowseRepoDirty == undefined){
@@ -72,26 +73,10 @@ define([
   FileBrowser.canPublish = false;
 
   /**
-   * Encode parts of the path between the colons
+   * Encode a path that has the slashes converted to colons
    **/
   FileBrowser.encodePathComponents = function (path) {
-    var result = path;
-
-    // only parse paths greater than 1 ":"
-    if (path.length > 1) {
-      var encodedParts = [];
-
-      var parts = path.split(":");
-
-      for (var x = 0; x <= parts.length - 1; x++) {
-        if (parts[x] != "") {
-          encodedParts[x] = encodeURIComponent(parts[x]);
-        }
-      }
-      result = encodedParts.join(":");
-    }
-
-    return result;
+    return Encoder.encode( "{0}", path );
   };
 
   FileBrowser.setShowHiddenFiles = function (value) {
