@@ -33,7 +33,19 @@ public class JcrStringHelper {
    * @return
    */
   public static String fileNameEncode(String fileName) {
-    return Text.escapeIllegalJcrChars( fileName );
+    String s = Text.escapeIllegalJcrChars( fileName );
+    StringBuilder sb = new StringBuilder();
+    for ( int i = 0; i < s.length(); i++ ) {
+      char c = s.charAt( i );
+      if ( c == '!' || c == '(' || c == ':' || c == '^' || c == '[' || c == ']' || c == '{' || c == '}' || c == '?' ) {
+        sb.append( '%' );
+        sb.append( Character.toUpperCase( Character.forDigit( c / 16, 16 ) ) );
+        sb.append( Character.toUpperCase( Character.forDigit( c % 16, 16 ) ) );
+      } else {
+        sb.append( c );
+      }
+    }
+    return sb.toString();
   }
 
   /**
