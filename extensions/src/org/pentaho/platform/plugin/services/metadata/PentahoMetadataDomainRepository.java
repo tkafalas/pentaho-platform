@@ -695,4 +695,8 @@ public class PentahoMetadataDomainRepository implements IMetadataDomainRepositor
     }
     return metaMap;
   }
+  
+  public static Set<RepositoryFile> getFiles( final IUnifiedRepository repository, final String domainId ) {
+    return metaMapStore.get( repository ).getFiles( domainId );
+  }
 }
